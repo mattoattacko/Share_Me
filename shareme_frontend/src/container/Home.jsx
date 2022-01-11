@@ -22,7 +22,6 @@ const Home = () => {
     client.fetch(query).then((data) => {
       setUser(data[0]);
     });
-    
   }, []);
 
   useEffect(() => {
@@ -30,8 +29,7 @@ const Home = () => {
   });
 
   return (
-    
-    <div className="flex bg-gray-50 md:flex-grow flex-col h-screen transition-height duration-75 ease-out">
+    <div className="flex bg-gray-50 md:flex-row flex-col h-screen transition-height duration-75 ease-out">
       <div className='hidden md:flex h-screen flex-initial'>
         {/* Mobile Sidebar */}
         <Sidebar user={user && user}/> 
