@@ -2,15 +2,57 @@ import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { MdDownloadForOffline } from 'react-icons/md';
-import { AiTwoToneDelete } from 'react-icons/ai';
+import { AiTwotoneDelete } from 'react-icons/ai';
 import { BsFillArrowUpRightCircleFill } from 'react-icons/bs';
 
 import { urlFor, client } from '../client';
+import { fetchUser } from '../utils/fetchUser';
 
-const Pin = ({ pin: { postedBy, image, _id, destination }}) => {
+const Pin = ({ pin: { postedBy, image, _id, destination, save }}) => {
     const [postHovered, setPostHovered] = useState(false);
-    const [savingPost, setSavingPost] = useState(false);
+    // const [savingPost, setSavingPost] = useState(false);
     const navigate = useNavigate();
+
+    const user = fetchUser();
+
+    const alreadySaved = !!(save?.filter((item) => item.postedBy._id === user.googleId))?.length;
+
+    // if alreadySaved example: userId is 1 // 
+    // 1, [2, 3, 1] -> [1].length -> 1 -> !0 -> true -> !true -> false
+    // not alreadySaved example: userId is 4 // 
+    // 1, [2, 3, 1] -> [].length -> 0 -> !0 -> false -> !false -> true
+
+    const savePin = (id) => {
+      if(!alreadySaved) {
+        // setSavingPost(true);
+
+        // all this comes from Sanity and allows us to update the save array
+        client
+          .patch(id)
+          .setIfMissing({ save: [] })
+          .insert('after', 'save[-1]', [{
+            _key: uuidv4(),
+            userId: user.googleId,
+            postedBy: {
+              _type: 'postedBy',
+              _ref: user.googleId,
+            },
+          }])
+          .commit()
+          .then(() => {
+            window.location.reload();
+            // setSavingPost(false);
+          })
+      }
+    }
+
+    const deletePin = (id) => {
+      client
+        .delete(id)
+        .then(() => {
+          window.location.reload();
+        })
+    }
 
   return (
     <div className="m-2">
@@ -39,11 +81,62 @@ const Pin = ({ pin: { postedBy, image, _id, destination }}) => {
                   <MdDownloadForOffline />
                 </a>
               </div>
+
+              {/* Checks if user has already downloaded the image */}
+              {alreadySaved ? (
+                <button type="button" className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
+                  {save?.length} Saved
+                </button>
+              ) : (
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    savePin(_id);
+                  }}
+                  type="button" 
+                  className="bg-red-500 opacity-70 hover:opacity-100 text-white font-bold px-5 py-1 text-base rounded-3xl hover:shadow-md outline-none">
+                    Save
+                </button>
+              )}
+            </div>
+            <div className="flex justify-between items-center gap-2 w-full">
+              {/* Checks if we have destination url */}
+              {destination && (
+                <a 
+                  href={destination}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="bg-white flex items-center gap-2 text-black font-bold p-2 pl-4 pr-4 rounded-full opacity-70 hover:100 hover:shadow-md"
+                >
+                  <BsFillArrowUpRightCircleFill />
+                  {/* Makes our url shorter and easier to read */}
+                  {destination.length > 20 ? destination.slice(8, 20) : destination.slice(8)} 
+                </a>
+              )}
+              {postedBy?._id === user.googleId && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deletePin(_id);
+                  }}
+                  className="bg-white p-2 opacity-70 hover:opacity-100 font-bold text-dark text-base rounded-3xl hover:shadow-md outline-none"
+                >
+                  <AiTwotoneDelete />
+                </button>
+              )}
             </div>
           </div>
-        )}
-      
+        )}      
       </div>      
+      <Link to={`user-profile/${postedBy?._id}`} className="flex gap-2 mt-2 items-center">
+        <img 
+          className="rounded-full w-8 h-8 object-cover"
+          src={postedBy?.image}
+          alt='user-profile'
+        />
+        <p className="font-semibold capitalize">{postedBy?.userName}</p>
+      </Link>
     </div>
   )
 }
