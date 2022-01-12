@@ -28,12 +28,12 @@ export default {
       title: 'Image',
       type: 'image',
       options: {
-        hotspot: true, // hotspot is a variable property of the image type allowing users to select what areas of an image should be cropped, centered, etc
-      }
+        hotspot: true, 
+      },
     },   
     {
       name: 'userId',
-      title: 'UserID',
+      title: 'UserId',
       type: 'string',
     },   
     {
@@ -45,13 +45,19 @@ export default {
       name: 'save',
       title: 'Save',
       type: 'array',
-      of: [{ type: 'save'}]
+      of: [{ type: 'save' }],
     },   
     {
       name: 'comments',
       title: 'Comments',
       type: 'array',
-      of: [{ type: 'comment'}]
+      of: [{ type: 'comment' }],
     },
-  ]
-}
+  ],
+};
+
+
+
+
+
+// hotspot is a variable property of the image type allowing users to select what areas of an image should be cropped, centered, etc

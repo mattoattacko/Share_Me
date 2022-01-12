@@ -6,12 +6,12 @@ export default {
     {
       name: 'userName',
       title: 'UserName',
-      type: 'string'
+      type: 'string',
     },
     {
       name: 'image',
       title: 'Image',
-      type: 'string'
+      type: 'string',
     },
-  ]
-}
+  ],
+};

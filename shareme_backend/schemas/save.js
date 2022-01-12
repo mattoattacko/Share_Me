@@ -9,9 +9,11 @@ export default {
       type: 'postedBy',
     },     
     {
-      name: 'userId', //userid of the user who saved the pin
-      title: 'UserID',
+      name: 'userId', 
+      title: 'UserId',
       type: 'string',
     }, 
-  ]
-}
+  ],
+};
+
+//userid of the user who saved the pin
