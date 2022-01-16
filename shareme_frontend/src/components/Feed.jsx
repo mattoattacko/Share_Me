@@ -34,6 +34,9 @@ const Feed = () => {
 
   if(loading) return <Spinner message='Adding new content to your feed!'/>;
 
+  // If there are no pins for a category //
+  if(!pins?.length) return <h2>No pins found. Be the first to create one!</h2>;
+
   return (
     <div>
       {pins && <MasonryLayout pins={pins} />}
