@@ -21,14 +21,14 @@ const Login = () => {
       _type: 'user',
       userName: name,
       image: imageUrl,
-    }
+    };
 
     // Creates a new document if it doesnt already exist in the DB
     client.createIfNotExists(doc)
       .then(() => {
-        navigate('/', { replace: true })
-      })
-  }
+        navigate('/', { replace: true });
+      });
+  };
 
   return (
     <div className="flex justify-start items-center flex-col h-screen">
@@ -53,7 +53,7 @@ const Login = () => {
           {/* renderProps comes from the Google Login package */}
           <div className='shadow-2xl'>
             <GoogleLogin 
-              clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+               clientId={`${process.env.REACT_APP_GOOGLE_API_TOKEN}`}
               render={(renderProps) => (
                 <button
                   type="button"
@@ -73,7 +73,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Login;

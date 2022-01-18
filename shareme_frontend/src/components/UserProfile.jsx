@@ -16,7 +16,6 @@ const activeBtnStyles = 'bg-red-500 text-white font-bold p-2 rounded-full w-20 o
 const notActiveBtnStyles = 'bg-primary mr-4 text-black font-bold p-2 rounded-full w-20 outline-none';
 
 const UserProfile = () => {
-
   const [user, setUser] = useState(null);
   const [pins, setPins] = useState(null);
   const [text, setText] = useState('Created'); // Created || Saved
@@ -81,6 +80,7 @@ const UserProfile = () => {
               src={user.image}
               alt='user-pic'
             />
+          </div>
             <h1 className='font-bold text-3xl text-center mt-3'>
               {user.userName}
             </h1>
@@ -89,7 +89,7 @@ const UserProfile = () => {
             <div className='absolute top-0 z-1 right-0 p-2'>
               {userId === user._id && (
                 <GoogleLogout 
-              clientId={process.env.REACT_APP_GOOGLE_API_TOKEN}
+              clientId={`${process.env.REACT_APP_GOOGLE_API_TOKEN}`}
               render={(renderProps) => (
                 <button
                   type="button"
@@ -144,7 +144,7 @@ const UserProfile = () => {
           )}  
 
 
-        </div>
+        {/* </div> */}
       </div>
     </div>
   )
